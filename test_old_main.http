@@ -1,0 +1,27 @@
+# Test your FastAPI endpoints
+
+GET http://127.0.0.1:8000/
+
+###
+
+GET http://127.0.0.1:8000/hello/Benyamin Mahmoudyan
+
+###
+
+GET http://127.0.0.1:8000/blog/software-engineerign/?is_private=off
+
+###
+
+POST http://127.0.0.1:8000/blog/create
+content-type: application/json
+
+{
+  "title": "my title",
+  "content": "my content"
+}
+
+###
+
+GET http://127.0.0.1:8000/blogs/
+
+###
