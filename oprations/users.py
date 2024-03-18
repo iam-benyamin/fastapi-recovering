@@ -3,8 +3,9 @@ from sqlalchemy import delete, select, update
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from db.models import User
 import exceptions
+from db.models import User
+from schema.jwt import JWTResponsePayload
 from schema.output import RegisterOutput
 from utils.jwt import JWTHandler
 from utils.secrets import password_manager
@@ -56,14 +57,14 @@ class UsersOperations:
 
             return user_data
 
-    async def user_delete_account(self, username: str, password: str) -> None:
-        delete_query = delete(User).where(User.username == username, User.password == password)
+    async def user_delete_account(self, username: str) -> None:
+        delete_query = delete(User).where(User.username == username)
 
         async with self.db_session as session:
             await session.execute(delete_query)
             await session.commit()
 
-    async def login(self, username: str, password: str) -> str:
+    async def login(self, username: str, password: str) -> JWTResponsePayload:
         query = select(User).where(User.username == username)
 
         async with self.db_session as session:

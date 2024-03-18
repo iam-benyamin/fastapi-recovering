@@ -14,7 +14,3 @@ class LoginInput(BaseModel):
 class UpdateProfileInput(BaseModel):
     old_username: str
     username: str
-
-
-class DeleteUserAccountInput(BaseModel):
-    username: str

@@ -3,10 +3,10 @@ from typing import Annotated
 
 from fastapi import Header, status
 from fastapi.exceptions import HTTPException
-from setttings import ACCESS_TOKEN_EXPIRE_MINUTES, ALGORITHM, SECRET_KEY
 
-from schema.jwt import JWTPayload, JWTResponsePayload
 import jwt
+from schema.jwt import JWTPayload, JWTResponsePayload
+from setttings import ACCESS_TOKEN_EXPIRE_MINUTES, ALGORITHM, SECRET_KEY
 
 
 class JWTHandler:

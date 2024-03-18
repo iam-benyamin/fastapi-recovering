@@ -5,7 +5,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from db.engine import get_db
 from oprations.users import UsersOperations
-from schema._input import RegisterInput, UpdateProfileInput, DeleteUserAccountInput, LoginInput
+from schema._input import LoginInput, RegisterInput, UpdateProfileInput
+from schema.jwt import JWTPayload
+from utils.jwt import JWTHandler
 
 router = APIRouter(prefix="/users")
 
@@ -32,12 +34,19 @@ async def get_user_profile(username: str, db_session: AsyncSession = Depends(get
 
 
 @router.patch("/update")
-async def update_user_profile(db_session: Annotated[AsyncSession, Depends(get_db)], data: UpdateProfileInput = Body()):
+async def update_user_profile(
+        db_session: Annotated[AsyncSession, Depends(get_db)],
+        data: UpdateProfileInput = Body(),
+
+):
     user = await UsersOperations(db_session).update_username(old_username=data.old_username, username=data.username)
 
     return user
 
 
-@router.delete("/delete/")
-async def delete_user(db_session: Annotated[AsyncSession, Depends(get_db)], data: DeleteUserAccountInput = Body()):
-    await UsersOperations(db_session).user_delete_account(username=data.username, password=data.password)
+@router.delete("/delete/", status_code=204)
+async def delete_user(
+        db_session: Annotated[AsyncSession, Depends(get_db)],
+        token_data: JWTPayload = Depends(JWTHandler.verify_token),
+):
+    await UsersOperations(db_session).user_delete_account(username=token_data.username)
